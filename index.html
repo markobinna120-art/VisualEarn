@@ -3,82 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Visualearn - Earn by Tasks</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#4f46e5">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init("eOnK3qvUFiw89dhdV")</script>
+<title>Visualearn - Dashboard</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:system-ui;background:#f5f7ff}
-.header{background:linear-gradient(135deg,#6a5af9,#4f46e5);color:#fff;padding:40px 20px;text-align:center}
-.card{max-width:420px;margin:-25px auto 20px;background:#fff;border-radius:20px;padding:24px;box-shadow:0 15px 40px rgba(79,70,229,.15)}
-input{width:100%;padding:14px;margin:10px 0;border:1px solid #e5e7eb;border-radius:12px;font-size:15px}
-button{width:100%;padding:14px;background:#4f46e5;color:#fff;border:0;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer}
-button:disabled{background:#a5b4fc}
+:root{
+  --primary: rgb(34, 197, 94); /* Changed to RGB - was #22c55e */
+  --primary-dark: rgb(22, 163, 74);
+  --bg: rgb(249, 250, 251);
+}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui;background:var(--bg)}
+.header{background:rgb(255,255,255);border-bottom:1px solid rgb(229,231,235);padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:800;color:var(--primary);font-size:20px}
+.btn-green{background:var(--primary);color:rgb(255,255,255);border:0;padding:10px 18px;border-radius:8px;font-weight:600}
+.card{background:rgb(255,255,255);border:1px solid rgb(229,231,235);border-radius:12px;padding:18px;margin:12px}
+.balance{font-size:28px;font-weight:800;margin:5px 0}
+.muted{color:rgb(107,114,128);font-size:13px}
+.task-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid rgb(243,244,246)}
+.task-row:last-child{border:0}
 </style>
 </head>
 <body>
 <div class="header">
-<h1 style="margin:0">Visualearn</h1>
-<p>Do Tasks • Earn Money • Fast Withdrawal</p>
-</div>
-<div class="card" id="regCard">
-<h2 style="margin-top:0">Create Account</h2>
-<input id="name" placeholder="Full Name">
-<input id="email" type="email" placeholder="Email Address">
-<input id="phone" placeholder="Phone Number">
-<button id="sendBtn" onclick="sendOTP()">Send Verification Code</button>
-<div id="otpArea" style="display:none">
-<p style="font-size:13px;color:green">Code sent to your email from markobinna120@gmail.com</p>
-<input id="otpInput" placeholder="Enter 6-digit code">
-<input id="pass" type="password" placeholder="Create Password">
-<button onclick="verifyOTP()">Verify & Join Visualearn</button>
-</div>
-<p style="font-size:12px;color:#6b7280;text-align:center;margin-top:15px">Admin: markobinna120@gmail.com<br>Web App Version</p>
+  <div class="logo">Visualearn</div>
+  <button class="btn-green">Create Task</button>
 </div>
 
-<script>
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js')}
-let generatedOTP="";
-function sendOTP(){
- const name=document.getElementById('name').value.trim();
- const email=document.getElementById('email').value.trim();
- if(!name || !email.includes('@')){alert('Enter name and valid email');return}
- generatedOTP=Math.floor(100000+Math.random()*900000).toString();
- const btn=document.getElementById('sendBtn');
- btn.innerText="Sending code..."; btn.disabled=true;
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:10px">
+  <div class="card">
+    <div class="muted">Earning balance</div>
+    <div class="balance">₦0.00</div>
+    <div class="muted">Pending balance: ₦0.00</div>
+    <button class="btn-green" style="width:100%;margin-top:10px">Withdraw</button>
+  </div>
+  <div class="card">
+    <div class="muted">Advertising balance</div>
+    <div class="balance">₦0.00</div>
+    <div class="muted">Active Tasks: 0</div>
+    <div class="muted">Total Spent: ₦0.00</div>
+  </div>
+</div>
 
- emailjs.send("service_147bn6m","template_kndbrqg",{
-   to_email: email,
-   to_name: name,
-   otp_code: generatedOTP,
-   from_name: "Visualearn",
-   user_email: email,
-   user_name: name
- }).then(()=>{
-   alert("Code sent to "+email);
-   document.getElementById('otpArea').style.display='block';
-   btn.innerText="Code Sent ✓";
- }, (err)=>{
-   console.log(err);
-   alert("Email failed, but demo code is: "+generatedOTP+" - Check your EmailJS template allows to_email");
-   document.getElementById('otpArea').style.display='block';
-   btn.disabled=false;
-   btn.innerText="Resend Code";
- });
-}
+<div class="card">
+  <h3 style="margin:0 0 10px">Suggested tasks</h3>
+  <div class="task-row">
+    <div><b>Follow Instagram</b><div class="muted">₦15 • @visualearn</div></div>
+    <button class="btn-green">Do</button>
+  </div>
+  <div class="task-row">
+    <div><b>Like Facebook Page</b><div class="muted">₦10 • Visualearn</div></div>
+    <button class="btn-green">Do</button>
+  </div>
+  <div class="task-row">
+    <div><b>Subscribe YouTube</b><div class="muted">₦20 • Visualearn</div></div>
+    <button class="btn-green">Do</button>
+  </div>
+</div>
 
-function verifyOTP(){
- const entered=document.getElementById('otpInput').value.trim();
- if(entered===generatedOTP){
-   localStorage.setItem('visualearn_user',document.getElementById('name').value);
-   localStorage.setItem('visualearn_email',document.getElementById('email').value);
-   alert("Welcome to Visualearn!");
-   window.location.href="dashboard.html";
- } else {
-   alert("Wrong code. Your code is "+generatedOTP+" (demo)");
- }
-}
-</script>
+<div class="card">
+  <h3 style="margin:0 0 10px">Wallet</h3>
+  <div class="muted">Available balance</div>
+  <div class="balance">₦0.00</div>
+  <div class="muted">Total Withdrawn: ₦0.00</div>
+  <h4 style="margin-top:15px">Transaction History</h4>
+  <div class="muted">No transactions yet</div>
+</div>
+
 </body>
  </html>
